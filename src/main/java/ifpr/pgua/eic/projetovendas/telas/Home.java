@@ -24,4 +24,16 @@ public class Home {
         painelCentral.getChildren().clear();
         painelCentral.getChildren().add(App.loadTela("fxml/listas.fxml", (o)->new Listas(repositorio)));
     }
+
+    @FXML
+    private void loadCadastroPessoa(){
+        painelCentral.getChildren().clear();
+        painelCentral.getChildren().add(App.loadTela("fxml/cadastro_pessoa.fxml", (o)->new CadastroPessoa(repositorio)));
+    }
+
+    @FXML
+    private void loadCadastroProduto(){
+        painelCentral.getChildren().clear();
+        painelCentral.getChildren().add(App.loadTela("fxml/cadastro_produto.fxml", (o)->new CadastroProduto(repositorio)));
+    }
 }
