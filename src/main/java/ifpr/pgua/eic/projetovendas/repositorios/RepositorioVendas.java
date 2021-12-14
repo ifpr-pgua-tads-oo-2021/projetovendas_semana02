@@ -1,5 +1,10 @@
 package ifpr.pgua.eic.projetovendas.repositorios;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import ifpr.pgua.eic.projetovendas.models.Pessoa;
@@ -17,8 +22,34 @@ public class RepositorioVendas {
 
     public boolean cadastrarPessoa(String nome, String email, String telefone){
         if(buscarPessoa(email)==null){
-            this.pessoas.add(new Pessoa(nome,email,telefone));
-            return true;
+            Pessoa p = new Pessoa(nome,email,telefone);
+            
+            try{
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/app","user","user12345");
+
+                Statement stm = con.createStatement();
+
+                String sql = "INSERT INTO pessoas(nome,email,telefone) VALUES ('"+nome+"','"+email+"','"+telefone+"')";
+
+                stm.execute(sql,Statement.RETURN_GENERATED_KEYS);
+                
+                //pegando o id gerado para a pessoa
+                ResultSet rsId = stm.getGeneratedKeys();
+                rsId.next();
+                int id = rsId.getInt(1);
+                
+                rsId.close();
+                stm.close();
+                con.close();
+
+                p.setId(id);
+
+                this.pessoas.add(p);
+                return true;
+            }catch(SQLException e){
+                e.printStackTrace();
+                return false;
+            }
         }
 
         return false;
@@ -35,8 +66,37 @@ public class RepositorioVendas {
     public boolean cadastrarProduto(String nome, String descricao, int quantidadeEstoque, double valor){
 
         if(buscarProduto(nome) == null){
-            this.produtos.add(new Produto(nome, descricao, quantidadeEstoque, valor));
-            return true;
+            try{
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/app","user","user12345");
+
+                Statement stm = con.createStatement();
+
+                String sql = "INSERT INTO produtos(nome,descricao,quantidadeEstoque,valor) VALUES ('"+nome+"','"+descricao+"',"+quantidadeEstoque+","+valor+")";
+                
+                stm.execute(sql,Statement.RETURN_GENERATED_KEYS);
+                
+                //pegando o id gerado para o produto
+                ResultSet rsId = stm.getGeneratedKeys();
+                rsId.next();
+                int id = rsId.getInt(1);
+                
+                rsId.close();
+                stm.close();
+                con.close();
+
+                Produto p = new Produto(nome, descricao, quantidadeEstoque, valor);
+                
+                p.setId(id);
+
+                this.produtos.add(p);
+            
+                return true;
+            }catch(SQLException e){
+                e.printStackTrace();
+                return false;
+            }
+            
+
         }
 
         return false;
