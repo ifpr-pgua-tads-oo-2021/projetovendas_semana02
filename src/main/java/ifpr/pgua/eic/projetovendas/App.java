@@ -9,6 +9,10 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 
+import ifpr.pgua.eic.projetovendas.daos.JDBCPessoaDAO;
+import ifpr.pgua.eic.projetovendas.daos.JSONPessoaDAO;
+import ifpr.pgua.eic.projetovendas.daos.interfaces.PessoaDAO;
+import ifpr.pgua.eic.projetovendas.repositorios.RepositorioPessoas;
 import ifpr.pgua.eic.projetovendas.repositorios.RepositorioVendas;
 import ifpr.pgua.eic.projetovendas.telas.Home;
 
@@ -17,14 +21,17 @@ import ifpr.pgua.eic.projetovendas.telas.Home;
  */
 public class App extends Application {
 
+    PessoaDAO pessoaDAO = new JDBCPessoaDAO();
+    
     RepositorioVendas repositorio = new RepositorioVendas();
+    RepositorioPessoas repositorioPessoas = new RepositorioPessoas(pessoaDAO);
 
 
     @Override
     public void start(Stage stage) throws IOException {
         
 
-        Scene scene = new Scene(loadTela("fxml/home.fxml", o->new Home(repositorio)), 640, 480);
+        Scene scene = new Scene(loadTela("fxml/home.fxml", o->new Home(repositorioPessoas,repositorio)), 640, 480);
         stage.setScene(scene);
         stage.show();
     }

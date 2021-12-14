@@ -15,6 +15,7 @@
       <VBox>
          <Label text="Produtos"/>
          <ListView fx:id="lstProdutos" />
+         <Label fx:id="lbListaVaziaProdutos" text="Lista Vazia!!" visible="false"/>
       </VBox>
       
    </children>
