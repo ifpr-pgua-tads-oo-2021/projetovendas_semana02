@@ -23,6 +23,7 @@ public class RepositorioVendas {
     public boolean cadastrarPessoa(String nome, String email, String telefone){
         if(buscarPessoa(email)==null){
             Pessoa p = new Pessoa(nome,email,telefone);
+            this.pessoas.add(p);
             
             try{
                 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/app","user","user12345");
@@ -44,7 +45,7 @@ public class RepositorioVendas {
 
                 p.setId(id);
 
-                this.pessoas.add(p);
+                
                 return true;
             }catch(SQLException e){
                 e.printStackTrace();
